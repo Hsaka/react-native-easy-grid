@@ -1,53 +1,54 @@
 'use strict';
 
-import React, {Component} from 'react';
-import {View, TouchableOpacity} from 'react-native';
+import React, { Component } from 'react';
+import { View, TouchableOpacity } from 'react-native';
 
 import computeProps from '../Utils/computeProps';
 import _ from 'lodash';
 
-
 export default class RowNB extends Component {
-    prepareRootProps() {
+  prepareRootProps() {
+    var type = {
+      flexDirection: 'row',
+      flex:
+        typeof this.props.size !== 'undefined'
+          ? this.props.size
+          : this.props.style && this.props.style.height ? 0 : 1
+    };
 
-        var type = {
-        	flexDirection: 'row',
-        	flex: (this.props.size) ? this.props.size : (this.props.style && this.props.style.height) ? 0 : 1,
-        }
+    var defaultProps = {
+      style: type
+    };
+    return computeProps(this.props, defaultProps);
+  }
 
-        var defaultProps = {
-            style: type
-        }
-        return computeProps(this.props, defaultProps);
+  setNativeProps(nativeProps) {
+    this._root.setNativeProps(nativeProps);
+  }
 
-    }
-
-    setNativeProps(nativeProps) {
-      this._root.setNativeProps(nativeProps);
-    }
-
-    render() {
-      if(this.props.onPress){
-        return(
-            <TouchableOpacity onPress={this.props.onPress}>
+  render() {
+    if (this.props.onPress) {
+      return (
+        <TouchableOpacity onPress={this.props.onPress}>
           <View
-        ref={component => this._root = component}
-        {...this.props}
-        {...this.prepareRootProps()}
-      >{this.props.children}</View>
-          </TouchableOpacity>
-      );
-      }
-      else{
-        return(
-          <View
-            ref={component => this._root = component}
+            ref={component => (this._root = component)}
             {...this.props}
             {...this.prepareRootProps()}
-          >{this.props.children}</View>
-        );
-      }
+          >
+            {this.props.children}
+          </View>
+        </TouchableOpacity>
+      );
+    } else {
+      return (
+        <View
+          ref={component => (this._root = component)}
+          {...this.props}
+          {...this.prepareRootProps()}
+        >
+          {this.props.children}
+        </View>
+      );
     }
-
-
+  }
 }
